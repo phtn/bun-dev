@@ -1,4 +1,4 @@
-interface SpotlightPostSchema {
+export interface SpotlightPostSchema {
   id: string;
   thumbnail: string;
   cover: string;
@@ -11,4 +11,4 @@ interface SpotlightPostSchema {
   icon?: string | undefined;
   createdAt?: Date | undefined;
   updatedAt?: Date | undefined;
-};
+}

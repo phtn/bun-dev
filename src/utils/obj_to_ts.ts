@@ -1,9 +1,10 @@
 import { dlopen, FFIType, suffix } from "bun:ffi";
 const { cstring } = FFIType;
 
-export async function obj_to_ts(json: string) {
+export async function obj_to_ts(source: string): Promise<string> {
+  console.warn(source);
   const path = `libobj_to_ts.${suffix}`;
-  const file = Bun.file(json);
+  const file = Bun.file(source);
   const arrbuf = await file.arrayBuffer();
   const buf = Buffer.from(arrbuf);
 

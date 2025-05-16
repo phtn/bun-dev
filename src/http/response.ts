@@ -8,7 +8,7 @@ export function serve_static(static_dir: string, req: Request): Response {
   const url = new URL(req.url);
   const file = Bun.file(`${static_dir}${url.pathname}`);
   if (file.size === 0) {
-    console.log(`[static]: no file found: ${req.method}: ${req.url}`);
+    console.error(`[static]: no file found: ${req.method}: ${req.url}`);
     return html(createElement("div", null, "404"), 404);
   }
   return new Response(file);

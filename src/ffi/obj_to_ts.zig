@@ -6,7 +6,7 @@ const std = @import("std");
 /// - `root`: Null-terminated root interface name.
 ///
 /// Returns a null-terminated C string allocated with the C allocator. Caller must free.
-export fn obj_2_ts(value: [*:0]const u8, root: [*:0]const u8) [*:0]u8 {
+pub fn obj_to_ts(value: [*:0]const u8, root: [*:0]const u8) ![*:0]u8 {
     const allocator = std.heap.c_allocator;
     const json_slice = std.mem.span(value);
     const root_slice = std.mem.span(root);
@@ -38,10 +38,12 @@ pub fn generateTypescript(
     root_name: []const u8,
 ) ![]u8 {
     var output = std.ArrayList(u8).init(allocator);
+    try output.appendSlice("\njson |>  type-def  <| bun·zig  <| re-up.ph\n\n\n");
     try output.appendSlice("interface ");
     try output.appendSlice(root_name);
     try output.appendSlice(" ");
     try writeTypeScriptObject(allocator, &output, value, 0);
+    try output.append('\n'); // Add final newline after the entire interface
     return output.toOwnedSlice();
 }
 
@@ -55,33 +57,29 @@ fn writeTypeScriptObject(
     value: std.json.Value,
     indent: usize,
 ) !void {
-    if (value != .object) return error.ExpectedObject;
-    const object = value.object;
-    // if (value.tag() != .object) return error.ExpectedObject;
-    // const object = value.object.?;
+    switch (value) {
+        .object => |object| {
+            try output.appendSlice("{\n");
 
-    try output.appendSlice("{\n");
+            var it = object.iterator();
+            while (it.next()) |entry| {
+                try writeIndent(output, indent + 1);
+                try output.appendSlice(entry.key_ptr.*);
 
-    var keys = object.iterator();
-    while (keys.next()) |entry| {
-        const key = entry.key_ptr.*;
-        const val = entry.value_ptr.*;
+                if (entry.value_ptr.* == .null) {
+                    try output.append('?');
+                }
 
-        try writeIndent(output, indent + 1);
-        try output.appendSlice(key);
+                try output.appendSlice(": ");
+                try writeTypeScriptType(allocator, output, entry.value_ptr.*, indent + 1);
+                try output.appendSlice("\n");
+            }
 
-        // Optional field if value is `null`
-        if (val == .null) {
-            try output.append('?');
-        }
-
-        try output.appendSlice(": ");
-        try writeTypeScriptType(allocator, output, val, indent + 1);
-        try output.appendSlice(";\n");
+            try writeIndent(output, indent);
+            try output.append('}');
+        },
+        else => return error.ExpectedObject,
     }
-
-    try writeIndent(output, indent);
-    try output.append('}');
 }
 
 fn writeTypeScriptType(
@@ -131,4 +129,13 @@ fn writeTypeScriptType(
 
         else => return error.UnexpectedError,
     }
+}
+
+export fn obj_2_ts(input: [*:0]const u8) [*:0]u8 {
+    const result = obj_to_ts(input, "Definition") catch |err| {
+        std.debug.print("Error: {}\n", .{err});
+        return std.heap.c_allocator.dupeZ(u8, "Error occurred") catch unreachable;
+    };
+    // Result is already [*:0]u8, so we can return it directly
+    return result;
 }
