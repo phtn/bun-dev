@@ -1,0 +1,20 @@
+{
+  "id": "2",
+  "name": "Bali",
+  "country": "Indonesia",
+  "image": "https://images.unsplash.com/photo-1537996194471-e657df975ab4?q=80&w=1000",
+  "rating": 4.8,
+  "reviews": 210,
+  "description": "Bali is a living postcard, an Indonesian paradise that feels like a fantasy with its lush terraced rice fields, stunning beaches, and vibrant spiritual culture.",
+  "tours": [
+    {
+      "id": "t3",
+      "name": "Bali Explorer",
+      "image": "https://images.unsplash.com/photo-1537953773345-d172ccf13cf1?q=80&w=1000",
+      "days": 7,
+      "price": 549,
+      "rating": 4.7,
+      "reviews": 89
+    }
+  ]
+}

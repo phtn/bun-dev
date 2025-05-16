@@ -1,0 +1,7 @@
+jsx = "react"
+jsxFactory = "h"
+jsxFragment = "Fragment"
+jsxImportSource = "react"
+
+
+logLevel = "debug" # "debug" | "warn" | "error"

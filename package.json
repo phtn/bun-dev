@@ -1,0 +1,24 @@
+{
+  "name": "bun-dev",
+  "version": "0.1.1",
+  "author": {
+    "name": "xpriori"
+  },
+  "module": "ESNext",
+  "type": "module",
+  "scripts": {
+    "dev": "bun run ./src/index.tsx --watch",
+    "zig:tspg": "zig build-lib ./src/ffi/ts_to_pg.zig -dynamic -OReleaseFast",
+    "zig:ots": "zig build-lib ./src/ffi/obj_to_ts.zig -dynamic -OReleaseFast"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.1.7"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "bun": "^1.1.26",
+    "ts-to-zod": "^3.11.0"
+  }
+}
