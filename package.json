@@ -4,14 +4,17 @@
   "author": {
     "name": "xpriori"
   },
-  "module": "ESNext",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "type": "module",
   "scripts": {
     "dev": "bun run ./src/index.tsx --watch",
     "zig:tspg": "zig build-lib ./src/ffi/ts_to_pg.zig -dynamic -OReleaseFast",
     "zig:ots": "zig build-lib ./src/ffi/obj_to_ts.zig -dynamic -OReleaseFast",
     "lint": "bun run lint.mjs",
-    "lint:fix": "bun run lint.mjs --fix"
+    "lint:fix": "bun run lint.mjs --fix",
+    "build": "bunchee src/index.tsx"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",

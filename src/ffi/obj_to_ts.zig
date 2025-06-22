@@ -136,6 +136,5 @@ export fn obj_2_ts(input: [*:0]const u8) [*:0]u8 {
         std.debug.print("Error: {}\n", .{err});
         return std.heap.c_allocator.dupeZ(u8, "Error occurred") catch unreachable;
     };
-    // Result is already [*:0]u8, so we can return it directly
     return result;
 }
